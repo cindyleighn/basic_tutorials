@@ -122,24 +122,31 @@ To stop the server in the terminal window press ctrl+c
 
 <br />
 
-TODO: Instructions for installing metamask
+If you do not have metamask installed, download and install the metamask extension from [metamask.io](https://metamask.io/download/) using one of the supported browsers (Chrome, Firefox, Brave, Edge or Opera)
+
+At install, it will ask some initial questions. You will want to `create a new wallet` and create a password. Choose a good password, you can not change the password later on.
+
+Choose `Secure your wallet` to write down and backup your 12-word secret Recovery Phrase. Save it in a place that you trust and only you can access (password manager, safe deposit or write down and store in own secret place)
+
+Finish the initial configuration.
 
 <br />
 
-TODO: Instructions for adding a new network
+The initial setup is now done, next we will add a new network. Go to the `Settings` menu, in there open the `Networks` tab and choose `Add a network` (add a network manually). Fill in the following network settings:
 
-Network settings:
 - Network name: Hardhat
 - New RPC URL: http://127.0.0.1:8545/
 - Chain ID: 31337
 - Currency symbol: ETH
 
+Then switch to this network.
+
 <br />
 
-TODO: Instructions to import the first 2 accounts from Hardhat into Metamask
+Choose `Import account` and import the following accounts:
 
-Account #0 private key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-Account #1 private key: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
+- Account #0 with private key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+- Account #1 with private key: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
 
 ---
 
@@ -276,12 +283,12 @@ export const ui = {
 ```
 
 > Notes on the `common.js` class:
-> 
+>
 > Configuration values (config):
 > - *networks*: array of configured networks that can be used in the dApp
 > - *contracts*: array of deployed contracts per defined network
 > - *defaultNetork*: the default network to start up on (default is Hardhat local node)
-> 
+>
 > Functions for creating UI elements (ui):
 > - *createHeader*: creates a header for the page, and is used as the initial object for appending other elements to the page
 > - *showMessage*: used to show a message to the screen with instructions to the user if metamask can't be connected
@@ -313,7 +320,7 @@ async function checkWeb3() {
         // add Metamask change handlers
         ethereum.on('chainChanged', handleChainChanged)
         ethereum.on('accountsChanged', handleAccountsChanged)
-        
+
         provider = new ethers.providers.Web3Provider(window.ethereum)
         signer = provider.getSigner()
         try {
@@ -374,7 +381,7 @@ async function switchNetwork(chainId) {
         })
     } catch (switchError) {
         if (switchError.code === 4902) {
-            // network is not configured, try to add it 
+            // network is not configured, try to add it
             await addNetwork(chainId)
         }
     }
@@ -700,7 +707,7 @@ async function showContractSection(main, address) {
 > - *handleAddTokenClick*: attempts to add the token to Metamask on the connected account (button click handler)
 > - *waitForReceipt*: waits for a receipt for a transaction (called in handleTransferSubmit)
 > - *handleTransferSubmit*: attempts to execute a transfer transaction for the provided input (button click handler)
-> - *showContractSection*: creates all the UI elements to be displayed in this step in the exercise 
+> - *showContractSection*: creates all the UI elements to be displayed in this step in the exercise
 
 <br />
 
@@ -727,4 +734,3 @@ async function showMain() {
 ---
 
 [Home](README.md)
-
