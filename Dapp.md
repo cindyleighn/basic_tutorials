@@ -429,43 +429,6 @@ async function handleAccountsChanged(account) {
     }
 }
 
-async function showMain() {
-    // Create root element for ui
-    let main = ui.createMain()
-
-    // Show connected address
-    const address = await signer.getAddress()
-    console.log('Address ' + address)
-    ui.createAndAppend(main, 'p', 'Account: ' + address)
-
-    // Show network selector
-    ui.createAndAppend(main, 'text', 'Network: ')
-    let networkSelector = ui.createAndAppend(main, 'select', '')
-    for (const [chainId, network] of Object.entries(config.networks)) {
-        const opt = ui.createAndAppend(networkSelector, 'option', network.chainName)
-        opt.setAttribute('value', chainId)
-        if (currentNetwork.chainId == chainId) opt.setAttribute('selected', 'true')
-    }
-    networkSelector.addEventListener('change', async (event) => {
-        const chainId = event.target.value
-        console.log('Switch to chainId ' + chainId)
-        await setupNetwork(chainId)
-    })
-
-    // Show balance of native currency on connected account
-    const symbol = currentNetwork.nativeCurrency.symbol
-    const balance = await signer.getBalance()
-    console.log('Balance ' + ethers.utils.commify(ethers.utils.formatEther(balance)) + ' ' + symbol)
-    ui.createAndAppend(main, 'p', 'Balance: ' + ethers.utils.commify(ethers.utils.formatEther(balance)) + ' ' + symbol)
-
-    // Section break
-    ui.createAndAppend(main, 'p', '---')
-
-    // Create message element for displaying messages
-    const messageDiv = createAndAppendDiv(main, '')
-    messageDiv.setAttribute('class', 'message')
-}
-
 async function showConnectionDetails(main, address) {
     // Show connected address
     console.log('Address ' + address)
