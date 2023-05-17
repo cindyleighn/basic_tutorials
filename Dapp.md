@@ -132,7 +132,7 @@ Finish the initial configuration.
 
 <br />
 
-The initial setup is now done, next we will add a new network. Go to the `Settings` menu, in there open the `Networks` tab and choose `Add a network` (add a network manually). Fill in the following network settings:
+The initial setup is now done, next we will add a new network. If you want to do this step manually as described next, make sure that the local hardhat node is running, otherwise metamask will not be able to connect to it during configuration. So, if the node is running, then go to the `Settings` menu, in there open the `Networks` tab and choose `Add a network` (add a network manually). Fill in the following network settings:
 
 - Network name: Hardhat
 - New RPC URL: http://127.0.0.1:8545/
