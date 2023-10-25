@@ -1,6 +1,6 @@
 # Prerequisites
 
-## NodeJS
+## NodeJS v20.9.0 (LTS in October 2023)
 
 Download: https://nodejs.org/en/download
 
@@ -8,14 +8,14 @@ Download: https://nodejs.org/en/download
 
 or bash script:
 ```bash
-curl "https://nodejs.org/dist/latest/node-${VERSION:-$(wget -qO- https://nodejs.org/dist/latest/ | sed -nE 's|.*>node-(.*)\.pkg</a>.*|\1|p')}.pkg" > "$HOME/Downloads/node-latest.pkg" && sudo installer -store -pkg "$HOME/Downloads/node-latest.pkg" -target "/"
+curl "https://nodejs.org/dist/v20.9.0/node-v20.9.0.pkg" > "$HOME/Downloads/node-v20.9.0.pkg" && sudo installer -store -pkg "$HOME/Downloads/node-v20.9.0.pkg" -target "/"
 ```
 
 <br />
 
 or homebrew:
 ```bash
-brew install node
+brew install node@20
 ```
 
 <br />
@@ -26,7 +26,7 @@ node --version
 ```
 > Output:
 > ```
-> v18.12.1
+> v20.9.0
 > ```
 
 ---

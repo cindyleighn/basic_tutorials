@@ -8,7 +8,7 @@ Open a bash terminal session in the directory you will be saving your code to an
 
 Create a new directory for your project:
 ```bash
-mkdir rabo-coin && cd rabo-coin
+mkdir sample-coin && cd sample-coin
 ```
 
 <br />
@@ -33,7 +33,7 @@ yarn hardhat --version
 ```
 > Output:
 > ```
-> 2.14.0
+> 2.18.3
 > ```
 
 ---
@@ -44,14 +44,14 @@ yarn hardhat --version
 
 Initiate the hardhat project:
 ```bash
-yarn hardhat
+yarn hardhat init
 ```
 - On the first project choose Create a TypeScript project
 - Leave defaults for the rest of the prompts (press enter for all)
 
 <br />
 
-Open the rabo-coin directory in VSCode:
+Open the sample-coin directory in VSCode:
 ```
 code .
 ```
@@ -66,7 +66,7 @@ Explore files in default project with sample contract and tests
 
 ## Step 3: Compile, test and deploy
 
-Open a terminal session in VSCode, and ensure you are in the project directory (rabo-coin)
+Open a terminal session in VSCode, and ensure you are in the project directory (sample-coin)
 
 Compile the sample project:
 ```bash
@@ -89,7 +89,7 @@ yarn hardhat run scripts/deploy.ts
 ```
 > Output: 
 > ```
-> Lock with 0.001ETH and unlock timestamp 1679119583 deployed to 0x5FbDB2315678afecb367f032d93F642f64180aa3
+> Lock with 0.001ETH and unlock timestamp 1698225041 deployed to 0x5FbDB2315678afecb367f032d93F642f64180aa3
 > ```
 
 ---
@@ -114,15 +114,17 @@ yarn hardhat run scripts/deploy.ts --network localhost
 > eth_sendTransaction
 >   Contract deployment: Lock
 >   Contract address:    0x5fbdb2315678afecb367f032d93f642f64180aa3
->   Transaction:         0x26b0d85de3bf5fa7530264fef2edfc89bd9eaba89730b9c338d4c5b7583ac11f
+>   Transaction:         0x5c0035470fb12ca9fac7b7aa74a1c511d447d3236aa88bb4a381ef824b30acc2
 >   From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
 >   Value:               0.001 ETH
->   Gas used:            326016 of 326016
->   Block #1:            0x24288deb19e27e3ba6aa08dec267d4091c228984ec939ea2a9161cb872dbf905
+>   Gas used:            326112 of 30000000
+>   Block #1:            0x00e8e554ffe5311427114994c7aeb6ca6d148ea64aec59db516b51c9cbb25687
 > ```
 > You will need the ***Contract address*** when interacting with the contract
 
 <br />
+
+NOTE: The Lock contract will lock the allocated ETH for 1 minute on deployment of the contract. A withdrawal will fail if you execute it within 1 minute of contract deployment.
 
 Return to the terminal used to deploy the smart contract and start an instance of Hardhat console:
 ```bash
@@ -141,31 +143,40 @@ await contract.withdraw()
 ```
 > Output:
 > ```json
-> {
->   hash: '0x3a0269dc290e47e4001b9a8fd1c0e7a93f4443f6673c62f21d1960e3894fcca2',
->   type: 2,
->   accessList: [],
->   blockHash: '0x24b49f383d7cd24704595ece03abeb9e848b3b0f15fb1484db06c717c73185f3',
+> ContractTransactionResponse {
+>   provider: HardhatEthersProvider {
+>     _hardhatProvider: LazyInitializationProviderAdapter {
+>       _providerFactory: [AsyncFunction (anonymous)],
+>       _emitter: [EventEmitter],
+>       _initializingPromise: [Promise],
+>       provider: [BackwardsCompatibilityProviderAdapter]
+>     },
+>     _networkName: 'localhost',
+>     _blockListeners: [],
+>     _transactionHashListeners: Map(0) {},
+>     _eventListeners: []
+>   },
 >   blockNumber: 2,
->   transactionIndex: 0,
->   confirmations: 1,
->   from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
->   gasPrice: BigNumber { value: "768002200" },
->   maxPriorityFeePerGas: BigNumber { value: "0" },
->   maxFeePerGas: BigNumber { value: "972002784" },
->   gasLimit: BigNumber { value: "36493" },
+>   blockHash: '0x51284d053a28ad78adf18c297abc4b4e4536198df37bf02ad246cfdf4ee60e8f',
+>   index: undefined,
+>   hash: '0x4a1811e3c96fa406d451bd39730ae89f383ec645b12bd8855071120a97ac3993',
+>   type: 2,
 >   to: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
->   value: BigNumber { value: "0" },
+>   from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
 >   nonce: 1,
+>   gasLimit: 30000000n,
+>   gasPrice: 768002900n,
+>   maxPriorityFeePerGas: 0n,
+>   maxFeePerGas: 972003670n,
 >   data: '0x3ccfd60b',
->   r: '0x0ab5399e355a4795535827edb08c55efc63a412176b1fd3977b02923607c4b57',
->   s: '0x528706dd1b049ec0ad6ff85d3746e24a4dfbef4447e2b572b0d053ec0be8f28c',
->   v: 1,
->   creates: null,
->   chainId: 31337,
->   wait: [Function (anonymous)]
+>   value: 0n,
+>   chainId: 31337n,
+>   signature: Signature { r: "0x9adcdb381ca7819f6eb3325e0ef4999eb71465e06dab3157e88839ca2d1a388a", s: "0x3d28475451929f9c48fa0c917d2aee7aaa89b4f335cb84fcdc883285a10718e4", yParity: 0, networkV: null },
+>   accessList: []
 > }
 > ```
+
+To exit the hardhat console press Ctrl+C and then press Ctrl+C again.
 
 ---
 
@@ -186,10 +197,10 @@ In the contracts/Lock.sol smart contract, uncomment lines 5 and 25:
 
 <br />
 
-Compile and redeploy the smart contract and execute the `withdraw()` function again and note the console in the Hardhat instance terminal:
+Compile and redeploy the smart contract and execute the `withdraw()` function again and note the console in the Hardhat node instance terminal:
 > ```
 > console.log:
->     Unlock time is '1679121200' and block timestamp is '1679121264'
+>     Unlock time is '1698226099' and block timestamp is '1698226214'
 > ```
 
 ---

@@ -1,5 +1,7 @@
 # Nodejs Express Dapp using ethers.js
 
+This uses the base project created in the [ERC20 Token Tutorial](ERC20.md). You should be in the `/sample-coin>` directory on your terminal instance.
+
 ## Step 1: Create project and install dependendencies
 
 <br />
@@ -92,7 +94,7 @@ Full `package.json` file:
     "start": "node src/app.js"
   },
   "dependencies": {
-    "ethers": "^6.3.0",
+    "ethers": "^6.8.0",
     "express": "^4.18.2"
   }
 }
@@ -148,6 +150,8 @@ Choose `Import account` and import the following accounts:
 - Account #0 with private key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 - Account #1 with private key: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
 
+Note: Never use these accounts outside of your local environment. The private keys are publicly known.
+
 ---
 
 <br />
@@ -173,7 +177,7 @@ Open the `index.html` in the src directory and add the following html:
 ```html
 <html>
     <head>
-        <title>Rabo-Coin Dapp</title>
+        <title>Sample-Coin Dapp</title>
     </head>
     <body>
         <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
@@ -226,18 +230,18 @@ const defaultNetwork = '0x7a69'
 const contracts = {
     '0x7a69': {
         contract: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-        name: 'RaboCoin',
-        symbol: 'RBC'
+        name: 'SampleCoin',
+        symbol: 'SPC'
     },
     '0x5': {
         contract: '',
-        name: 'RaboCoin',
-        symbol: 'RBC'
+        name: 'SampleCoin',
+        symbol: 'SPC'
     },
     '0xaa36a7': {
         contract: '',
-        name: 'RaboCoin',
-        symbol: 'RBC'
+        name: 'SampleCoin',
+        symbol: 'SPC'
     },
 }
 
@@ -251,7 +255,7 @@ export const config = {
 function createMain() {
     const main = document.createElement('center')
     document.body.replaceChildren(main)
-    createAndAppend(main, 'h2', 'Rabo-Coin dAPP')
+    createAndAppend(main, 'h2', 'Sample-Coin dAPP')
     return main
 }
 
@@ -514,10 +518,7 @@ Make sure your Hardhat localhost environment is running in a separate terminal i
 yarn hardhat node
 ```
 
-<br />
-
 In your working terminal instance, start the dapp:
-
 ```bash
 yarn start
 ```
@@ -530,7 +531,7 @@ Open http://localhost:3000/ in your browser. Click on the button to connect to M
 
 <br />
 
-## Step 5: Connect to Rabo-Coin smart contract and create transfer functionality
+## Step 5: Connect to Sample-Coin smart contract and create transfer functionality
 
 <br />
 
@@ -545,7 +546,7 @@ touch src/js/abi.js
 Open the `abi.js` in the src/js directory and add export variable for you smart contract's abi (application binary interface):
 
 ```javascript
-export const raboCoinABI = <<The value (array) of the abi property in your compiled smart contract code under /rabo-coin/artifacts/contracts/RaboCoin.sol/RaboCoin.json>>;
+export const sampleCoinABI = <<The abi value (array) in /Sample-coin/artifacts/contracts/SampleCoin.sol/SampleCoin.json>>;
 ```
 
 <br />
@@ -553,12 +554,12 @@ export const raboCoinABI = <<The value (array) of the abi property in your compi
 Add new import statement in to the top of the `index.js` file under the src/js directory:
 
 ```javascript
-import { raboCoinABI } from './abi.js'
+import { sampleCoinABI } from './abi.js'
 ```
 
 <br />
 
-Add the following new functions above the `showMain()` function:
+Add the following new functions above the `showMain()` function in `index.js`:
 
 ```javascript
 async function handleAddTokenClick(button, contract) {
@@ -620,31 +621,31 @@ async function handleTransferSubmit(button, contract) {
 }
 
 async function showContractSection(main, address) {
-    // Show balance of RBC token on connected account
-    const rbcConfig = config.contracts[currentNetwork.chainId];
+    // Show balance of SPC token on connected account
+    const spcConfig = config.contracts[currentNetwork.chainId];
 
-    if (rbcConfig.contract !== '') {
-        const contract = new ethers.Contract(rbcConfig.contract, raboCoinABI, signer);
+    if (spcConfig.contract !== '') {
+        const contract = new ethers.Contract(spcConfig.contract, sampleCoinABI, signer);
         const balance = await contract.balanceOf(address)
-        console.log(rbcConfig.name + ' RBC Balance ' + ethers.utils.commify(ethers.utils.formatEther(balance)) + ' ' + rbcConfig.symbol)
-        ui.createAndAppend(main, 'p', rbcConfig.name + ' Balance: ' + ethers.utils.commify(ethers.utils.formatEther(balance)) + ' ' + rbcConfig.symbol)
+        console.log(spcConfig.name + ' SPC Balance ' + ethers.utils.commify(ethers.utils.formatEther(balance)) + ' ' + spcConfig.symbol)
+        ui.createAndAppend(main, 'p', spcConfig.name + ' Balance: ' + ethers.utils.commify(ethers.utils.formatEther(balance)) + ' ' + spcConfig.symbol)
 
-        // Show button to allow user to import RBC token into Metamask
+        // Show button to allow user to import SPC token into Metamask
         if (ethereum.isMetaMask) {
-            let button = ui.createAndAppend(main, 'button', 'Add ' + rbcConfig.symbol + ' token into MetaMask')
+            let button = ui.createAndAppend(main, 'button', 'Add ' + spcConfig.symbol + ' token into MetaMask')
             button.addEventListener('click', () => {
                 handleAddTokenClick(button, contract)
             })
         }
 
-        // If the connected account has RBC tokens show the transfer form
+        // If the connected account has SPC tokens show the transfer form
         if (!balance.isZero()) {
             let block = ui.createAndAppend(main, 'p', 'Transfer ')
 
             let inputAmount = ui.createAndAppend(block, 'input', '')
             inputAmount.setAttribute('class', 'amount')
 
-            ui.createAndAppend(block, 'text', ' ' + rbcConfig.symbol + ' to address ')
+            ui.createAndAppend(block, 'text', ' ' + spcConfig.symbol + ' to address ')
 
             let inputAddress = ui.createAndAppend(block, 'input', '')
             inputAddress.setAttribute('class', 'address')
@@ -655,10 +656,10 @@ async function showContractSection(main, address) {
                 handleTransferSubmit(button, contract)
             })
         } else {
-            ui.createAndAppend(main, 'p', 'No balance, cannot transfer ' + rbcConfig.symbol + ' tokens')
+            ui.createAndAppend(main, 'p', 'No balance, cannot transfer ' + spcConfig.symbol + ' tokens')
         }
     } else {
-        ui.createAndAppend(main, 'p', rbcConfig.symbol + ' contract address missing for selected network')
+        ui.createAndAppend(main, 'p', spcConfig.symbol + ' contract address missing for selected network')
     }
 
     // Section break
@@ -693,6 +694,58 @@ async function showMain() {
     messageDiv.setAttribute('class', 'message')
 }
 ```
+
+<br />
+
+Deploy the SampleCoin smart contract:
+
+Go back to the sample-coin directory:
+```bash
+cd ..
+```
+
+Deploy contract:
+```bash
+yarn hardhat run scripts/deploy_SampleCoin.ts --network localhost
+```
+> Output:
+> ```
+> SampleCoin deployed to 0x5FbDB2315678afecb367f032d93F642f64180aa3 with an initialSupply 10000000000000000000000
+> ```
+> Note: If your contract address is different, you need to change the configuration in `src/js/common.js` for the contracts const:
+> ```
+> ...
+> const contracts = {
+>     '0x7a69': {
+>         contract: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+>         name: 'SampleCoin',
+>         symbol: 'SPC'
+>     },
+>     ...
+> }
+> ...
+> ```
+
+<br />
+
+Go back to the dapp directory in your working terminal:
+```
+cd dapp
+```
+
+<br />
+
+In your working terminal instance, start the dapp:
+
+```bash
+yarn start
+```
+
+<br />
+
+Open http://localhost:3000/ in your browser and connect your Metamask wallet. Connect using the first Hardhat account you imported. You can do the following:
+- Ensure the the Hardhat localhost network is selected. If you are on the correct network, you will see the 'Add SPC token to Metamask'. Clicking this button will add the SPC token to your assets in Metamask
+- You will also see an option to transfer tokens. Here you can enter the number of tokens to transfer, and a box for the address of the recipient wallet. Try entering an amount of 10 and the transfer address as 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 (2nd Hardhat account we imported). Click Submit and sign the transaction in Metamask. The SPC balance will be updated and account with address 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 has 10 SPC coins.
 
 ---
 
